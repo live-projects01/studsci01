@@ -13,6 +13,7 @@ import MainGallery from './pages/MainGallery';
 import EventGallery from './pages/EventGallery';
 import About from './pages/About';
 import OurTeam from './pages/OurTeam';
+import Check from './pages/Check';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,7 +22,8 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Dummy/>}/>
+          <Route path='/' element={<Check/>}/>
+          <Route path='/home' element={<Dummy/>}/>
           <Route path='/landing' element={<Landing/>}/>
           <Route path='/signup' element={<Signup/>}/>
           <Route path='/signin' element={<Signin/>}/>
