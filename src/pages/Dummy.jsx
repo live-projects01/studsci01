@@ -145,6 +145,14 @@ function Dummy() {
                   Our Team
                 </a>
               </li>
+              <li>
+                <a
+                  href="/login"
+                  className="hover:text-blue-700 dark:hover:text-blue-500"
+                >
+                  Login
+                </a>
+              </li>
             </ul>
 
             {/* Search Bar */}
@@ -219,6 +227,14 @@ function Dummy() {
                   className="block py-2 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
                   Our Team
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/login"
+                  className="hover:text-blue-700 dark:hover:text-blue-500"
+                >
+                  Login
                 </a>
               </li>
             </ul>
