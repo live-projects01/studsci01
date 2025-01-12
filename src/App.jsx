@@ -38,6 +38,10 @@ import TestGet from './newpages/TestGet.jsx';
 import EventUpload from './newpages/EventUpload.jsx';
 import EventSlider from './newpages/EventSlider.jsx';
 import EventUpload1 from './newpages/EventUpload1.jsx';
+import Newlanding from './newpages/Newlanding.jsx';
+import UpcomingUpload from './newpages/UpcomingUpload.jsx';
+import ImageModeration from './newpages/ImageModeration.jsx';
+import SchoolImageCheck from './newpages/SchoolImageCheck.jsx';
 
 
 function App() {
@@ -48,7 +52,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Check/>}/>
-          <Route path='/home' element={<Dummy/>}/>
+          <Route path='/home' element={<Newlanding/>}/>
           <Route path='/oldlanding' element={<OldLanding/>}/>
           <Route path='/signup' element={<Signup/>}/>
           <Route path='/signin' element={<Signin/>}/>
@@ -79,6 +83,10 @@ function App() {
           <Route path='/eventupload' element={<EventUpload/>}/> 
           <Route path='/eventslider' element={<EventSlider/>}/> {/* BEST EVENT SLIDER FROM SUPABASE */}
           <Route path='/eventupload1' element={<EventUpload1/>}/>{/*BEST EVENT UPLOADER TO SUPABASE */}
+          <Route path='/newland' element={<Newlanding/>}/> 
+          <Route path='/upcomingupload' element={<UpcomingUpload/>}/> 
+          <Route path='/imagemod' element={<ImageModeration/>}/> {/* PHOTO MODDING WORKS PERFECT */}
+          <Route path='/schlimagechk' element={<SchoolImageCheck/>}/>
           
 
 

@@ -1,14 +1,32 @@
+
 import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
+import { Content } from '@radix-ui/react-dropdown-menu';
 
 const supabaseUrl = 'https://sfqoiwmaxoxpaibcploq.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNmcW9pd21heG94cGFpYmNwbG9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzYyNDIyMDksImV4cCI6MjA1MTgxODIwOX0.HGiHK9cDPTv3p8-g3vD0i2dHBSf8gZ0M0iV1FIRTAIg';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-const EventSlider = () => {
+const EventSlider = ({ content }) => {
+
   const [events, setEvents] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Function to determine the correct file name based on language
+  const getFileName = (baseName) => {
+    switch (content.language) {
+      case 'Kannada':
+        console.log('language changed')
+        return `kannada_${baseName}`;
+      case 'Malayalam':
+        console.log('language changed')
+        return `malayalam_${baseName}`;
+      default:
+        console.log('language changed')
+        return `english_${baseName}`;
+    }
+  };
 
   // Fetch the latest 5 event folders
   const fetchEvents = async () => {
@@ -27,25 +45,31 @@ const EventSlider = () => {
         const { data: files, error: filesError } = await supabase.storage
           .from('new_events')
           .list(folderName);
-        
+
         if (filesError) throw filesError;
 
         // Find the image file (assuming it's a .jpg or .png file)
-        const imageFile = files.find(file => file?.name?.toLowerCase().endsWith('.jpg') || file?.name?.toLowerCase().endsWith('.png'));
+        const imageFile = files.find(
+          (file) =>
+            file?.name?.toLowerCase().endsWith('.jpg') ||
+            file?.name?.toLowerCase().endsWith('.png')
+        );
 
         // Construct the image URL
-        const imageUrl = imageFile ? `https://sfqoiwmaxoxpaibcploq.supabase.co/storage/v1/object/public/new_events/${folderName}/${imageFile.name}` : '';
+        const imageUrl = imageFile
+          ? `https://sfqoiwmaxoxpaibcploq.supabase.co/storage/v1/object/public/new_events/${folderName}/${imageFile.name}`
+          : '';
 
-        // Fetch the heading.txt
+        // Fetch the heading file based on language
         const { data: headingFile } = await supabase.storage
           .from('new_events')
-          .download(`${folderName}/heading.txt`);
+          .download(`${folderName}/${getFileName('heading.txt')}`);
         const heading = await headingFile.text();
 
-        // Fetch the description.txt
+        // Fetch the description file based on language
         const { data: descriptionFile } = await supabase.storage
           .from('new_events')
-          .download(`${folderName}/description.txt`);
+          .download(`${folderName}/${getFileName('description.txt')}`);
         const description = await descriptionFile.text();
 
         return {
@@ -66,7 +90,7 @@ const EventSlider = () => {
   // Initialize the events on component mount
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [content.language]);
 
   // Handle slider navigation
   const nextSlide = () => {
@@ -80,13 +104,21 @@ const EventSlider = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-8">
+      <h2 className="text-4xl md:text-5xl font-bold text-center text-blue-900 mb-12">
+        {content.heading}
+      </h2>
+      <div className="flex items-center justify-center mb-12">
+        <div className="h-px w-24 bg-blue-200" />
+        <div className="w-3 h-3 rounded-full bg-blue-400 mx-4" />
+        <div className="h-px w-24 bg-blue-200" />
+      </div>
       {events.length > 0 && (
-        <div className="relative">
+        <div className="relative bg-white shadow-lg rounded-lg overflow-hidden">
           {/* Event Grid Layout */}
-          <div className="flex items-center space-x-4 p-6 bg-white shadow-lg rounded-lg">
+          <div className="flex items-start">
             {/* Left side: Image */}
-            <div className="flex-shrink-0 w-1/2 h-64">
+            <div className="flex-shrink-0 w-3/5 h-80">
               <img
                 src={events[currentIndex].imageUrl}
                 alt="Event"
@@ -95,26 +127,28 @@ const EventSlider = () => {
             </div>
 
             {/* Right side: Heading and Description */}
-            <div className="w-1/2">
-              <h2 className="text-lg font-bold mb-2">
+            <div className="w-2/5 p-8">
+              <h2 className="text-2xl font-bold mb-4">
                 {events[currentIndex].heading}
               </h2>
-              <p className="text-gray-700">{events[currentIndex].description}</p>
+              <p className="text-gray-700 leading-relaxed">
+                {events[currentIndex].description}
+              </p>
             </div>
           </div>
 
           {/* Navigation buttons */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-100"
           >
-            <ChevronLeft size={24} />
+            <ChevronLeft size={28} />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md hover:bg-gray-100"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-md hover:bg-gray-100"
           >
-            <ChevronRight size={24} />
+            <ChevronRight size={28} />
           </button>
         </div>
       )}
